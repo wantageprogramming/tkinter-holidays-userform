@@ -33,6 +33,7 @@ features = [{'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.25, 'data
 class CreateFeatures:
     def __init__(self, frame):
         self.frame = frame
+        # will store all the entry boxes in self.widgets
         self.widgets = []
         self.holnumber = 0
         
@@ -42,6 +43,7 @@ class CreateFeatures:
         self.datacols = []
         for i in self.features:
             if i['wtype'] == 'entry':
+                # this is very messy, need to improve!
                 if i['datacol'] == 'H':
                     self.qy2020 = tk.StringVar()
                     x = tk.Entry(self.frame, bg=i['bg'], textvariable=self.qy2020)
@@ -74,6 +76,7 @@ class CreateFeatures:
     def edit2021(self):
         pass
         
+    # add data from csv file to entry boxes
     def add_data(self):
         self.count = 0
         for y in self.widgets:
@@ -88,6 +91,7 @@ class CreateFeatures:
             y.insert(0, item)
             self.count += 1
             
+    #need to check if first or last record
     def next_record(self):
         self.holnumber += 1
         self.add_data()
