@@ -40,6 +40,7 @@ class CreateFeatures:
     def create(self, features, holidaylist):
         self.features = features
         self.holidaylist = holidaylist
+        # create list of data columns - I need to access them when adding data to entry boxes
         self.datacols = []
         for i in self.features:
             if i['wtype'] == 'entry':
@@ -67,6 +68,7 @@ class CreateFeatures:
         self.previous_button.place(relwidth=0.10, relx=0.05, rely=0.92)
         self.next_button.place(relwidth=0.10, relx=0.20, rely=0.92)
         
+    # opens new window to edit months. Will combine 2020 and 2021
     def edit2020(self):
         newwin = tk.Toplevel(self.frame)
         newwin.title('New Window')
