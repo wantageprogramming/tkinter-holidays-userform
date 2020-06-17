@@ -33,25 +33,22 @@ features = [{'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.25, 'data
 class CreateFeatures:
     def __init__(self, frame):
         self.frame = frame
-        # will store all the entry boxes in self.widgets
-        self.widgets = []
         self.holnumber = 0
         
     def create(self, features, holidaylist):
         self.features = features
         self.holidaylist = holidaylist
-        # create list of data columns - I need to access them when adding data to entry boxes
-        self.datacols = []
+        # create entrydata dictionary to store all entry boxes with text variables 
+        self.entrydata = {}
         for i in self.features:
             if i['wtype'] == 'entry':
-                # this is very messy, need to improve!
-                if i['datacol'] == 'H':
-                    self.qy2020 = tk.StringVar()
-                    x = tk.Entry(self.frame, bg=i['bg'], textvariable=self.qy2020)
-                else:
-                    x = tk.Entry(self.frame, bg=i['bg'])
-                self.datacols.append(i['datacol'])
-                self.widgets.append(x)
+                # entrylist[0] is textvariable, entrylist[1] is entry object
+                entrylist = []
+                entrylist.append(tk.StringVar())
+                x = tk.Entry(self.frame, bg=i['bg'], textvariable=entrylist[0])
+                entrylist.append(x)
+                # add entry box details to entrydata dictionary
+                self.entrydata[i['datacol']] = entrylist
             if i['wtype'] == 'label':
                 x = tk.Label(self.frame, bg=i['bg'], text=i['text'], fg="white", anchor="sw")
             x.place(relwidth=i['width'],relx=i['x'],rely=i['y'])
@@ -71,27 +68,34 @@ class CreateFeatures:
     # opens new window to edit months. Will combine 2020 and 2021
     def edit2020(self):
         newwin = tk.Toplevel(self.frame)
-        newwin.title('New Window')
+        # get data from 'H' in entrydata dictionary, first item in list
+        y = self.entrydata['H'][0].get()
+        newwin.title(y)
         newwin.geometry("200x100") 
         newwin.resizable(0, 0)
+        # create test button
+        self.testbutton = tk.Button(newwin, text="edit", bg="yellow", command=self.test)
+        self.testbutton.pack()
+        
+    def test(self):
+        self.entrydata['H'][0].set('Hello')
     
     def edit2021(self):
         pass
         
     # add data from csv file to entry boxes
     def add_data(self):
-        self.count = 0
-        for y in self.widgets:
-            y.delete(0, tk.END)
+        # loop through entrydata dictionary
+        for x, y in self.entrydata.items():
+            y[1].delete(0, tk.END)
             
             # eg holidaylist.loc[0, 'D']
-            item = self.holidaylist.loc[self.holnumber,self.datacols[self.count]]
+            item = self.holidaylist.loc[self.holnumber, x.title()]
             
             # remove NAN from entry boxes and replace with blank
             if item != item:
                 item = ""
-            y.insert(0, item)
-            self.count += 1
+            y[1].insert(0, item)
             
     #need to check if first or last record
     def next_record(self):
