@@ -12,20 +12,20 @@ canvas.pack()
 frame = tk.Frame(canvas, bg="green")
 frame.place(relwidth=1, relheight=1)
 
-features = [{'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.25, 'datacol':'D'},
+features = [{'wtype': 'entry','bg':'white','width':0.4,'x':0.05, 'y':0.25, 'datacol':'D'},
             {'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.35, 'datacol':'E'},
             {'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.45, 'datacol':'F'},
             {'wtype': 'entry','bg':'white','width':0.9,'x':0.05, 'y':0.55, 'datacol':'G'},
-            {'wtype': 'entry','bg':'white','width':0.2,'x':0.05, 'y':0.65, 'datacol':'H'},
-            {'wtype': 'entry','bg':'white','width':0.2,'x':0.50, 'y':0.65, 'datacol':'I'},
+            {'wtype': 'entry','bg':'white','width':0.3,'x':0.05, 'y':0.65, 'datacol':'H'},
+            {'wtype': 'entry','bg':'white','width':0.3,'x':0.45, 'y':0.65, 'datacol':'I'},
             {'wtype': 'entry','bg':'white','width':0.7,'x':0.05, 'y':0.75, 'datacol':'J'},
             {'wtype': 'entry','bg':'white','width':0.7,'x':0.05, 'y':0.85, 'datacol':'K'},
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.21, 'text':'Holiday ID' },
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.31, 'text':'Title' },
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.41, 'text':'URL' },
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.51, 'text':'Notes' },
-            {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.61, 'text':'2020' },
-            {'wtype': 'label','bg':'green','width':0.25,'x':0.50, 'y':0.61, 'text':'2021' },
+            {'wtype': 'label','bg':'green','width':0.30,'x':0.05, 'y':0.61, 'text':'2020' },
+            {'wtype': 'label','bg':'green','width':0.30,'x':0.45, 'y':0.61, 'text':'2021' },
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.71, 'text':'Categories' },
             {'wtype': 'label','bg':'green','width':0.25,'x':0.05, 'y':0.81, 'text':'Regions' }
             ]
@@ -56,21 +56,22 @@ class CreateFeatures:
         self.add_data()
             
     def create_buttons(self):
-        self.button2020 = tk.Button(self.frame, text="edit", bg="yellow", command=self.edit2020)
-        self.button2021 = tk.Button(self.frame, text="edit", bg="yellow", command=self.edit2021)
+        self.buttonYears = tk.Button(self.frame, text="Edit Years", bg="yellow", command=self.editYears)
         self.previous_button = tk.Button(self.frame, text="<", bg="yellow", command=self.previous_record)
         self.next_button = tk.Button(self.frame, text=">", bg="yellow", command=self.next_record)
-        self.button2020.place(relwidth=0.10, relx=0.26, rely=0.64)
-        self.button2021.place(relwidth=0.10, relx=0.74, rely=0.64)
+        self.save_button = tk.Button(self.frame, text="Save Changes", bg="yellow", command=self.save_changes)
+        self.buttonYears.place(relwidth=0.15, relx=0.80, rely=0.64)
         self.previous_button.place(relwidth=0.10, relx=0.05, rely=0.92)
         self.next_button.place(relwidth=0.10, relx=0.20, rely=0.92)
+        self.save_button.place(relwidth=0.20, relx=0.35, rely=0.92)
         
-    # opens new window to edit months. Will combine 2020 and 2021
-    def edit2020(self):
+    # opens new window to edit months.
+    def editYears(self):
         newwin = tk.Toplevel(self.frame)
         # get data from 'H' in entrydata dictionary, first item in list
-        y = self.entrydata['H'][0].get()
-        newwin.title(y)
+        yr2020 = self.entrydata['H'][0].get()
+        yr2021 = self.entrydata['I'][0].get()
+        newwin.title("Edit Years")
         newwin.geometry("200x100") 
         newwin.resizable(0, 0)
         # create test button
@@ -79,8 +80,8 @@ class CreateFeatures:
         
     def test(self):
         self.entrydata['H'][0].set('Hello')
-    
-    def edit2021(self):
+        
+    def save_changes(self):
         pass
         
     # add data from csv file to entry boxes
